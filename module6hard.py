@@ -5,7 +5,11 @@ class Figure:
     sides_count = 0
 
     def __init__(self, color, *sides):
-        self.__color = list(color)
+        r, g, b = color
+        if self.__is_valid_color(r, g, b):
+            self.__color = [r, g, b]
+        else:
+            raise ValueError("Некорректные значения цвета. Значения цвета должны быть целыми числами между 0 и 255.")
         if len(sides) != self.sides_count:
             self.__sides = [1] * self.sides_count
         else:
@@ -18,9 +22,12 @@ class Figure:
     def __is_valid_color(self, r, g, b):
         return all(isinstance(x, int) and 0 <= x <= 255 for x in (r, g, b))
 
-    def set_color(self, r, g, b):
+    def set_color(self, *color):
+        r, g, b = color
         if self.__is_valid_color(r, g, b):
-            self.__color = [r, g, b]
+            self.__color = list(color)
+        else:
+            return
 
     def __is_valid_sides(self, *new_sides):
         return len(new_sides) == self.sides_count and all(isinstance(x, int) and x > 0 for x in new_sides)
@@ -34,6 +41,8 @@ class Figure:
     def set_sides(self, *new_sides):
         if self.__is_valid_sides(*new_sides):
             self.__sides = list(new_sides)
+        else:
+            return
 
 
 class Circle(Figure):
